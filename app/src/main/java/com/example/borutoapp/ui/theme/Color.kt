@@ -21,3 +21,8 @@ val Colors.backgroundTheme
 val Colors.fontTheme
     @Composable
     get() = if(isLight) DarkGray else LightGray
+
+val Colors.activeIndicatorTheme
+    @Composable
+    get() = if (isLight) Purple500 else Purple200
+

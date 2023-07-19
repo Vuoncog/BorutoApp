@@ -1,11 +1,14 @@
 package com.example.borutoapp.display.screens.welcome
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.borutoapp.R
 import com.example.borutoapp.domain.model.OnBoardingPage
 import com.example.borutoapp.ui.theme.*
+import com.google.accompanist.pager.HorizontalPagerIndicator
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -30,11 +34,38 @@ fun WelcomeScreen() {
     )
 
     val statusPager = rememberPagerState(pageCount = { boards.size })
-    HorizontalPager(
-        state = statusPager,
-        modifier = Modifier.fillMaxSize()
-    ) { position ->
-        BoardingPagerScreen(onBoardingPage = boards[position])
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                color = MaterialTheme.colors.backgroundTheme
+            )
+            .padding(bottom = MEDIUM_PADDING),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        HorizontalPager(
+            state = statusPager,
+            modifier = Modifier.weight(12f)
+        ) { position ->
+            BoardingPagerScreen(onBoardingPage = boards[position])
+        }
+
+        HorizontalPagerIndicator(
+            modifier = Modifier.weight(0.5f),
+            pagerState = statusPager,
+            pageCount = boards.size,
+            activeColor = MaterialTheme.colors.activeIndicatorTheme,
+            inactiveColor = LightGray,
+            indicatorWidth = PAGER_INDICATOR_WIDTH,
+            spacing = PAGER_INDICATOR_SPACE
+        )
+
+        FinishButton(
+            pagerState = statusPager,
+            modifier = Modifier.weight(1f)
+        ) {
+
+        }
     }
 }
 
@@ -44,14 +75,13 @@ fun BoardingPagerScreen(onBoardingPage: OnBoardingPage) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .background(
-                color = MaterialTheme.colors.backgroundTheme
-            )
-            .fillMaxSize()
+            .padding(vertical = MEDIUM_PADDING)
     ) {
         Image(
-            modifier = Modifier.fillMaxWidth(0.8f)
-                .fillMaxHeight(0.7f),
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .fillMaxHeight(0.7f)
+                .padding(bottom = LARGE_PADDING),
             painter = painterResource(id = onBoardingPage.image),
             contentDescription = stringResource(R.string.on_boarding_image)
         )
@@ -73,6 +103,29 @@ fun BoardingPagerScreen(onBoardingPage: OnBoardingPage) {
                 .padding(horizontal = EXTRA_PADDING)
                 .padding(top = MEDIUM_PADDING)
         )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun FinishButton(
+    pagerState: PagerState,
+    modifier: Modifier,
+    onClick: () -> Unit
+) {
+    Box(modifier = modifier) {
+        AnimatedVisibility(
+            visible = pagerState.currentPage == 2,
+        ) {
+            Button(
+                onClick = onClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = EXTRA_PADDING)
+            ) {
+                Text(text = stringResource(R.string.finish).uppercase())
+            }
+        }
     }
 }
 
