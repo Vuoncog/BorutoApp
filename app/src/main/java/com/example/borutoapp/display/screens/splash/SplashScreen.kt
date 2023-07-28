@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,13 +23,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.borutoapp.R
+import com.example.borutoapp.navigation.Screen
 import com.example.borutoapp.ui.theme.Purple200
 import com.example.borutoapp.ui.theme.Purple500
 import com.example.borutoapp.ui.theme.SuitableBlack
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    navController: NavHostController,
+    splashViewModel: SplashViewModel = hiltViewModel()
+) {
+    val firstTime = splashViewModel.onBoardingState.collectAsState()
+
     val degrees = remember {
         Animatable(
             initialValue = 0f
@@ -43,6 +53,12 @@ fun SplashScreen() {
                 delayMillis = 200
             )
         )
+        navController.popBackStack()
+        if (firstTime.value) {
+            navController.navigate(Screen.Home.route)
+        }else{
+            navController.navigate(Screen.Welcome.route)
+        }
     })
 
     Splash(
@@ -89,11 +105,11 @@ fun Splash(
 @Preview
 @Composable
 fun SplashScreenPreview() {
-    SplashScreen()
+    SplashScreen(rememberNavController())
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun SplashScreenPreviewDarkMode() {
-    SplashScreen()
+    SplashScreen(rememberNavController())
 }

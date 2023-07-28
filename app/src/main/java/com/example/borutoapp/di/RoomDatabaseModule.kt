@@ -2,7 +2,7 @@ package com.example.borutoapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.borutoapp.data.local.HeroDatabase
+import com.example.borutoapp.data.local.BorutoDatabase
 import com.example.borutoapp.utilities.Constants.BORUTO_DATABASE
 import dagger.Module
 import dagger.Provides
@@ -17,11 +17,11 @@ object RoomDatabaseModule {
 
     @Provides
     @Singleton
-    fun providesHeroDao(heroDatabase: HeroDatabase) = heroDatabase.heroDao()
+    fun providesHeroDao(borutoDatabase: BorutoDatabase) = borutoDatabase.heroDao()
 
     @Provides
     @Singleton
-    fun providesHeroRemoteKeyDao(heroDatabase: HeroDatabase) = heroDatabase.heroRemoteKeyDao()
+    fun providesHeroRemoteKeyDao(borutoDatabase: BorutoDatabase) = borutoDatabase.heroRemoteKeyDao()
 
 
     @Provides
@@ -30,7 +30,7 @@ object RoomDatabaseModule {
         @ApplicationContext context: Context
     ) = Room.databaseBuilder(
         context,
-        HeroDatabase::class.java,
+        BorutoDatabase::class.java,
         BORUTO_DATABASE
     ).build()
 }
