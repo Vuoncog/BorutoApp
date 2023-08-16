@@ -16,6 +16,11 @@ class HeroRemoteMediator @Inject constructor(
     val borutoApi: BorutoApi,
     val borutoDatabase: BorutoDatabase
 ) : RemoteMediator<Int, Hero>() {
+
+    override suspend fun initialize(): InitializeAction {
+        return InitializeAction.LAUNCH_INITIAL_REFRESH
+    }
+
     private val heroDao = borutoDatabase.heroDao()
     private val heroRemoteDao = borutoDatabase.heroRemoteKeyDao()
 
@@ -33,10 +38,11 @@ class HeroRemoteMediator @Inject constructor(
                 prevPage
             }
             LoadType.APPEND -> {
-                val remoteKey = getRemoteKeyForLastItem(state)
-                val nextPage = remoteKey?.nextPage ?: return MediatorResult.Success(
-                    endOfPaginationReached = remoteKey != null
-                )
+                val remoteKeys = getRemoteKeyForLastItem(state = state)
+                val nextPage = remoteKeys?.nextPage
+                    ?: return MediatorResult.Success(
+                        endOfPaginationReached = remoteKeys != null
+                    )
                 nextPage
             }
         }
@@ -67,16 +73,18 @@ class HeroRemoteMediator @Inject constructor(
         }
     }
 
-    private suspend fun getRemoteKeyClosetToCurrentPosition(state: PagingState<Int, Hero>): HeroRemoteKey? {
-        val anchorPosition = state.anchorPosition
-        return anchorPosition?.let { position ->
-            state.closestItemToPosition(position)
-                ?.let { hero -> heroRemoteDao.getRemoteKey(heroId = hero.id) }
+    private fun getRemoteKeyClosetToCurrentPosition(state: PagingState<Int, Hero>): HeroRemoteKey? {
+        return state.anchorPosition?.let {
+            state.closestItemToPosition(it)?.id?.let { id ->
+                heroRemoteDao.getRemoteKey(
+                    heroId = id
+                )
+            }
         }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, Hero>): HeroRemoteKey? {
-        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull().let { hero ->
+    private fun getRemoteKeyForFirstItem(state: PagingState<Int, Hero>): HeroRemoteKey? {
+        return state.pages.firstOrNull() { it.data.isNotEmpty() }?.data?.firstOrNull().let { hero ->
             hero?.let {
                 heroRemoteDao.getRemoteKey(
                     heroId = it.id
@@ -85,13 +93,12 @@ class HeroRemoteMediator @Inject constructor(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, Hero>): HeroRemoteKey? {
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull().let { hero ->
-            hero?.let {
+    private fun getRemoteKeyForLastItem(state: PagingState<Int, Hero>): HeroRemoteKey? {
+        return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
+            ?.let {
                 heroRemoteDao.getRemoteKey(
                     heroId = it.id
                 )
             }
-        }
     }
 }

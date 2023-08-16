@@ -14,6 +14,9 @@ val SuitableWhite = Color(0xFFFAFAFA)
 val DarkGray = Color(0xFF3A3A3A)
 val LightGray = Color(0xFFD3D3D3)
 
+val DarkShimmerGray = Color(0xFF222222)
+val LightShimmerGray = Color(0xFFEEEEEE)
+
 val Colors.backgroundTheme
     @Composable
     get() = if(isLight) SuitableWhite else SuitableBlack
@@ -26,3 +29,18 @@ val Colors.activeIndicatorTheme
     @Composable
     get() = if (isLight) Purple500 else Purple200
 
+val Colors.appBarTheme
+    @Composable
+    get() = if (isLight) Purple500 else SuitableBlack
+
+val Colors.colorOnPrimary
+    @Composable
+    get() = if (isLight) SuitableWhite else LightGray
+
+val Colors.itemBackgroundOnPrimary
+    @Composable
+    get() = if (isLight) LightGray else DarkGray
+
+val Colors.shimmerItemBackground
+    @Composable
+    get() = if (isLight) LightShimmerGray else DarkShimmerGray

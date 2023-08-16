@@ -29,8 +29,6 @@ object RoomDatabaseModule {
     fun providesRoomDatabase(
         @ApplicationContext context: Context
     ) = Room.databaseBuilder(
-        context,
-        BorutoDatabase::class.java,
-        BORUTO_DATABASE
-    ).build()
+        context, BorutoDatabase::class.java, BORUTO_DATABASE
+    ).allowMainThreadQueries().build()
 }

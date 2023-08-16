@@ -5,6 +5,7 @@ import com.example.borutoapp.data.repository.DataStoreOperationsImpl
 import com.example.borutoapp.data.repository.Repository
 import com.example.borutoapp.domain.repository.DataStoreOperations
 import com.example.borutoapp.domain.use_cases.UseCases
+import com.example.borutoapp.domain.use_cases.get_heroes.GetAllHeroesUseCases
 import com.example.borutoapp.domain.use_cases.read_state.ReadOnBoardingState
 import com.example.borutoapp.domain.use_cases.save_state.SaveOnBoardingState
 import dagger.Module
@@ -33,6 +34,7 @@ object DataStoreOperationsModule {
     ): UseCases =
         UseCases(
             readOnBoardingState = ReadOnBoardingState(repository),
-            saveOnBoardingState = SaveOnBoardingState(repository)
+            saveOnBoardingState = SaveOnBoardingState(repository),
+            getAllHeroesUseCases = GetAllHeroesUseCases(repository)
         )
 }
