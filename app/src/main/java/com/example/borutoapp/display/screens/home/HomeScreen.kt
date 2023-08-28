@@ -9,18 +9,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.example.borutoapp.display.common.ErrorScreen
 import com.example.borutoapp.display.common.HeroItem
 import com.example.borutoapp.display.components.ShimmerEffect
 import com.example.borutoapp.domain.model.Hero
+import com.example.borutoapp.navigation.Screen
 import com.example.borutoapp.ui.theme.MEDIUM_PADDING
 import com.example.borutoapp.ui.theme.SMALL_PADDING
 
 @Composable
 fun HomeScreen(
+    navController: NavHostController,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val allHeroes = homeViewModel.getAllHeroes.collectAsLazyPagingItems()
@@ -29,7 +34,11 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            HomeAppBar()
+            HomeAppBar(
+                onSearchClicked = {
+                    navController.navigate(Screen.Search.route)
+                }
+            )
         },
         content = {
             HomeContent(
@@ -79,7 +88,10 @@ fun handlePagingResult(
                 ShimmerEffect()
                 false
             }
-            error != null -> false
+            error != null -> {
+                ErrorScreen(error = error)
+                false
+            }
             else -> true
         }
     }
@@ -88,5 +100,7 @@ fun handlePagingResult(
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(
+        navController = rememberNavController()
+    )
 }

@@ -12,7 +12,9 @@ import com.example.borutoapp.ui.theme.colorOnPrimary
 import com.example.borutoapp.ui.theme.fontTheme
 
 @Composable
-fun HomeAppBar() {
+fun HomeAppBar(
+    onSearchClicked: () -> Unit,
+) {
     TopAppBar(
         title = {
             Text(
@@ -22,7 +24,9 @@ fun HomeAppBar() {
             )
         },
         actions = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                onSearchClicked()
+            }) {
                 Icon(
                     imageVector = Icons.Filled.Search,
                     tint = MaterialTheme.colors.colorOnPrimary,
@@ -37,5 +41,7 @@ fun HomeAppBar() {
 @Preview
 @Composable
 fun HomeAppBarPreview() {
-    HomeAppBar()
+    HomeAppBar(
+        onSearchClicked = {}
+    )
 }

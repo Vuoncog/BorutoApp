@@ -6,4 +6,6 @@
     <string name="search_icon">Search icon</string>
     <string name="explore">Explore</string>
     <string name="image_hero">Image hero item</string>
+    <string name="error_icon">Error icon</string>
+    <string name="close_icon">Close icon</string>
 </resources>
