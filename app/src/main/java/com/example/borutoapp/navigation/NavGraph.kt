@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.borutoapp.display.screens.detail.DetailScreen
 import com.example.borutoapp.display.screens.home.HomeScreen
 import com.example.borutoapp.display.screens.search.SearchScreen
 import com.example.borutoapp.display.screens.splash.SplashScreen
@@ -41,7 +42,7 @@ fun SetUpNavigation(
                 type = NavType.IntType
             }))
         ) {
-
+            DetailScreen(navController = navController)
         }
         composable(route = Screen.Search.route) {
             SearchScreen(

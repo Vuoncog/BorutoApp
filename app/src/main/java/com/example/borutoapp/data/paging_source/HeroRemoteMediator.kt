@@ -23,7 +23,7 @@ class HeroRemoteMediator @Inject constructor(
     override suspend fun initialize(): InitializeAction {
         val currentTime = System.currentTimeMillis()
         val lastUpdated = heroRemoteDao.getRemoteKey(heroId = 1)?.lastUpdated ?: 0L
-        val cacheTimeout = 2
+        val cacheTimeout = 1440
 
         val diffInMinutes = (currentTime - lastUpdated) / 1000 / 60
         return if (diffInMinutes.toInt() <= cacheTimeout) {
@@ -94,7 +94,7 @@ class HeroRemoteMediator @Inject constructor(
     }
 
     private fun getRemoteKeyForFirstItem(state: PagingState<Int, Hero>): HeroRemoteKey? {
-        return state.pages.firstOrNull() { it.data.isNotEmpty() }?.data?.firstOrNull().let { hero ->
+        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull().let { hero ->
             hero?.let {
                 heroRemoteDao.getRemoteKey(
                     heroId = it.id
@@ -104,7 +104,7 @@ class HeroRemoteMediator @Inject constructor(
     }
 
     private fun getRemoteKeyForLastItem(state: PagingState<Int, Hero>): HeroRemoteKey? {
-        return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let {
                 heroRemoteDao.getRemoteKey(
                     heroId = it.id

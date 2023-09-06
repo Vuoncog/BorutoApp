@@ -3,6 +3,7 @@ package com.example.borutoapp.display.common
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
@@ -20,17 +21,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.borutoapp.R
 import com.example.borutoapp.display.components.RatingWidget
 import com.example.borutoapp.domain.model.Hero
+import com.example.borutoapp.navigation.Screen
 import com.example.borutoapp.ui.theme.*
 import com.example.borutoapp.utilities.Constants.BASE_URL
 
 @Composable
 fun HeroItem(
-    hero: Hero
+    hero: Hero,
+    navController: NavHostController
 ) {
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(context = LocalContext.current)
@@ -45,6 +50,9 @@ fun HeroItem(
         modifier = Modifier
             .fillMaxWidth()
             .height(HERO_ITEM_HEIGHT)
+            .clickable {
+                navController.navigate(Screen.Detail.getArgument(heroId = hero.id))
+            }
     ) {
         Surface(
             modifier = Modifier
@@ -148,6 +156,7 @@ fun HeroItemPreview() {
                 "Water",
                 "Yin"
             )
-        )
+        ),
+        navController = rememberNavController()
     )
 }

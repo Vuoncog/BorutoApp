@@ -8,4 +8,7 @@
     <string name="image_hero">Image hero item</string>
     <string name="error_icon">Error icon</string>
     <string name="close_icon">Close icon</string>
+    <string name="icon_of_info_box">Icon of Info box</string>
+    <string name="about">About</string>
+    <string name="image_background">Image background</string>
 </resources>

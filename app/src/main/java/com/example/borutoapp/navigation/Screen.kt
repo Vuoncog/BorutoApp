@@ -17,7 +17,7 @@ sealed class Screen(
     object Detail: Screen(
         route = "detail_screen/{$DETAIL_ARGUMENT_KEY}"
     ){
-        fun getArgument(heroId: String): String = "detail_screen/$heroId"
+        fun getArgument(heroId: Int): String = "detail_screen/$heroId"
     }
     object Search: Screen(
         route = "search_screen"
